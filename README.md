@@ -54,3 +54,7 @@ Contiene los o el propietario de la propiedad.
 | **genero**  | String      | NULLABLE     |
 | **casado**  | Boolean      | NULLABLE     |
 | **n_hijos**  | Integer      | NULLABLE     |
+
+## Diagrama E/R
+
+https://drive.google.com/file/d/1ZGk58pfa-kD9k4RlAZvzYUrDvaCLaHE6/view?usp=sharing
