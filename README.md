@@ -20,8 +20,7 @@ Representa a los vendedores de la inmobiliaria
 |-------------------|----------|-------------------------|
 | **id**           | Long     | PRIMARY KEY             |
 | **username**       | String   | UNIQUE              |
-| **rol**        | String   |         |
-| **contraseña**   | String   |                 |
+| **password**   | String   |                 |
 | **rol**          | String   |                 |
 | **fecha_registro** | Date    |                 |
 
@@ -58,3 +57,24 @@ Contiene los o el propietario de la propiedad.
 ## Diagrama E/R
 
 https://drive.google.com/file/d/1ZGk58pfa-kD9k4RlAZvzYUrDvaCLaHE6/view?usp=sharing
+
+## Endpoints
+
+### 1. Usuarios
+
+  - `POST /usuarios/login`: Permite al usuario autenticarse.
+      - **RUTA PÚBLICA** Todas las peticiones a este endpoint deben permitirse
+      - **Entrada**: JSON con `username` y `password`.
+      - **Salida**: Token de la sesión si las credenciales son válidas.
+      - **Excepciones**:
+        - Bad Request Exception (Error 400): Los campos username y password no pueden estar vacios
+        - Invalid Password Exception (Error 401): La contraseña introducida es incorrecta
+        - Username not found (Error 404): No existe ningun usuario asociado a ese username
+  - `GET /usuarios/{id}`: Permite obtener información de un usuario a traves de su id.
+      - **RUTA PRIVADA** Todas las peticiones a este endpoint se permiten si eres admin o si eres user solo se le permite acceder al usuario que este asociado a su id
+      - **Entrada**: Parametro `id`.
+      - **Salida**: Objeto UserDTO.
+      - **Excepciones**:
+        - Bad Request Exception (Error 400): El campo id no puede estar vacío.
+        - Illegal number exception (Error 400): La id debe de ser un número.
+        - Username not found (Error 404): No existe ningun usuario asociado a esa id.
