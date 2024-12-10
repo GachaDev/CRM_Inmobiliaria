@@ -35,7 +35,7 @@ Contiene los datos de la propiedad a vender.
 | **id**              | Long     | PRIMARY KEY             |
 | **id_propietario**          | Long   | FOREIGN KEY  (Propietarios)               |
 | **direccion**     | String   |                         |
-| **precio**          | Double   | NULLABLE                |
+| **precio**          | Double   |                 |
 | **vendida** | Boolean    |                |
 | **oculta** | Boolean    |                |
 | **id_usuario**  | Long      | FOREIGN KEY (Usuarios)  |
@@ -51,7 +51,7 @@ Contiene los propietarios de las propiedades.
 | **nombre** | String     |                     |
 | **apellidos**    | String     |                     |
 | **telefono**   | String      |      |
-| **genero**  | String      | NULLABLE     |
+| **genero**  | String      |     |
 | **casado**  | Boolean      | NULLABLE     |
 | **n_hijos**  | Integer      | NULLABLE     |
 
@@ -211,3 +211,18 @@ https://drive.google.com/file/d/1ZGk58pfa-kD9k4RlAZvzYUrDvaCLaHE6/view?usp=shari
       - Unauthorized (Error 403): No tienes suficientes permisos.
       - Propietario not found (Error 404): No existe ningun propietario asociada a esa id.
       - Internal Server Error (Error 500): Error interno de la base de datos.
+
+## Lógica de negocio
+
+| Campo                   | Regla de Validación                                                       | Código HTTP  | Mensaje de Error                                     |
+|-------------------------|---------------------------------------------------------------------------|--------------|-----------------------------------------------------|
+| `telefono`                  | Formato válido (regex).                                                   | 400          | "El campo telefono no tiene un formato válido."          |
+| `telefono`          | No puede estar vacío.                                                     | 400          | "El campo telefono no puede estar vacío."        |
+| `genero`       | El campo genero debe de ser igual a Hombre, Mujer o no identificado.                                                     | 400          | "El campo genero debe de ser correcto."      |
+| `genero`          | No puede estar vacío.                                                     | 400          | "El campo genero no puede estar vacío."        |
+| `nombre`          | No puede estar vacío.                                                     | 400          | "El campo nombre no puede estar vacío."        |
+| `apellidos`          | No puede estar vacío.                                                     | 400          | "El campo apellidos no puede estar vacío."        |
+| `direccion`       | No pueden haber dos direcciones iguales                                                        | 422          | "Esa dirección ya esta registrada"        |
+| `direccion`        | No puede ser null.                                                       | 400          | "El campo direccion no puede ser nulo."          |
+| `precio`              | Mayor que 0.                                                             | 400          | "El campo precio debe ser mayor que 0."            |
+| `n_hijos`              | Mayor o igual que 0.                                                             | 400          | "El campo n_hijos debe ser mayor o igual que 0."            |
