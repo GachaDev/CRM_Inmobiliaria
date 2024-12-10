@@ -23,6 +23,7 @@ Representa a los vendedores de la inmobiliaria
 | **password**   | String   |                 |
 | **rol**          | String   |                 |
 | **fecha_registro** | Date    |                 |
+| **id_propietario** | LONG    | NULLABLE                |
 
 ---
 
@@ -42,7 +43,7 @@ Contiene los datos de la propiedad a vender.
 ---
 
 ### 3. Propietario
-Contiene los o el propietario de la propiedad.
+Contiene los propietarios de las propiedades.
 
 | Campo            | Tipo     | Restricciones               |
 |-------------------|----------|-----------------------------|
@@ -95,22 +96,71 @@ https://drive.google.com/file/d/1ZGk58pfa-kD9k4RlAZvzYUrDvaCLaHE6/view?usp=shari
       - Invalid Password Exception (Error 401): La contraseña introducida es incorrecta.
       - Username not found (Error 404): No existe ningun usuario asociado a ese username.
       - Internal Server Error (Error 500): Error interno de la base de datos.
-- `PUT /usuarios/{username}`: Permite obtener actualizar el username o password de un usuario.
-  - **RUTA PRIVADA** Todas las peticiones a este endpoint se permiten si eres admin o se le permite acceder al usuario que este asociado al username pasado por parametro.
-  - **Entrada**: Parametro `username` y JSON UserDTO con la nueva información del usuario.
-  - **Salida**: Nuevo objeto UserDTO.
-  - **Excepciones**:
-    - Bad Request Exception (Error 400): El campo username y los campos del objeto user no pueden estar vacios.
-    - Unauthorized (Error 403): No tienes suficientes permisos.
-    - Username not found (Error 404): No existe ningun usuario asociado a ese username.
-    - Internal Server Error (Error 500): Error interno de la base de datos.
-- `DELETE /usuarios/{username}`: Permite al administrador eliminar un usuario por su username.
-  - **RUTA PRIVADA** Las peticiones se permiten si eres administrador.
-  - **Entrada**: Parametro `username`.
-  - **Salida**: N/A.
-  - **Excepciones**:
-    - Bad Request Exception (Error 400): El campo username no puede estar vacío.
-    - Invalid Password Exception (Error 401): La contraseña introducida es incorrecta.
-    - Unauthorized (Error 403): No tienes suficientes permisos.
-    - Username not found (Error 404): No existe ningun usuario asociado a ese username
-    - Internal Server Error (Error 500): Error interno de la base de datos.
+  - `PUT /usuarios/{username}`: Permite actualizar el username o password de un usuario.
+    - **RUTA PRIVADA** Todas las peticiones a este endpoint se permiten si eres admin o se le permite acceder al usuario que este asociado al username pasado por parametro.
+    - **Entrada**: Parametro `username` y JSON UserDTO con la nueva información del usuario.
+    - **Salida**: Nuevo objeto UserDTO.
+    - **Excepciones**:
+      - Bad Request Exception (Error 400): El campo username y los campos del objeto user no pueden estar vacios.
+      - Unauthorized (Error 403): No tienes suficientes permisos.
+      - Username not found (Error 404): No existe ningun usuario asociado a ese username.
+      - Internal Server Error (Error 500): Error interno de la base de datos.
+  - `DELETE /usuarios/{username}`: Permite al administrador eliminar un usuario por su username.
+    - **RUTA PRIVADA** Las peticiones se permiten si eres administrador.
+    - **Entrada**: Parametro `username`.
+    - **Salida**: N/A.
+    - **Excepciones**:
+      - Bad Request Exception (Error 400): El campo username no puede estar vacío.
+      - Unauthorized (Error 403): No tienes suficientes permisos.
+      - Username not found (Error 404): No existe ningun usuario asociado a ese username
+      - Internal Server Error (Error 500): Error interno de la base de datos.
+
+### 2. Propiedad
+
+  - `GET /propiedades/`: Permite obtener la información de todas las propiedades.
+    - **RUTA PRIVADA** Todas las peticiones a este endpoint se permiten si eres admin.
+    - **Entrada**: N/A.
+    - **Salida**: Lista con todos los objetos PropiedadDTO de todas las propiedades.
+    - **Excepciones**:
+      - Unauthorized (Error 403): No tienes suficientes permisos.
+      - Internal Server Error (Error 500): Error interno de la base de datos.
+  - `GET /propiedades/{id}`: Permite obtener información de una propiedad a traves de su id.
+    - **RUTA PRIVADA** Todas las peticiones a este endpoint se permiten si eres admin o se le permite acceder al usuario que este asociado a la propiedad solicitada.
+    - **Entrada**: Parametro `id`.
+    - **Salida**: Objeto PropiedadDTO.
+    - **Excepciones**:
+      - Bad Request Exception (Error 400): El campo id no puede estar vacío.
+      - Illegal number exception (Error 400): La id debe de ser un número.
+      - Unauthorized (Error 403): No tienes suficientes permisos.
+      - Propiedad not found (Error 404): No existe ninguna propiedad asociada a esa id.
+      - Internal Server Error (Error 500): Error interno de la base de datos.
+  - `POST /propiedades/`: Permite crear una propiedad.
+    - **RUTA PRIVADA** Todas las peticiones a este endpoint deben permitirse si eres administrador.
+    - **Entrada**: JSON con `id_propietario`, `direccion`, `precio` y `oculta`.
+    - **Salida**: Objeto PropiedadDTO.
+    - **Excepciones**:
+      - Bad Request Exception (Error 400): Los campos `id_propietario`, `direccion`, `precio` y `oculta` no pueden estar vacios.
+      - Illegal number exception (Error 400): La id del propietario y el precio deben de ser un número.
+      - Propietario Not Found Exception (Error 404): No hay ningun propietario asociado a esa id.
+      - Internal Server Error (Error 500): Error interno de la base de datos.
+  - `PUT /propiedades/{id}`: Permite actualizar la propiedad.
+    - **RUTA PRIVADA** Todas las peticiones a este endpoint se permiten si eres admin.
+    - **Entrada**: Id de la propiedad por parametro y JSON PropiedadDTO con la nueva información de la propiedad.
+    - **Salida**: Nuevo objeto PropiedadDTO.
+    - **Excepciones**:
+      - Bad Request Exception (Error 400): Los campos del objeto propiedad o la id no pueden estar vacios.
+      - Illegal number exception (Error 400): La id, la id del propietario y el precio deben de ser un número.
+      - Unauthorized (Error 403): No tienes suficientes permisos.
+      - Propiedad not found (Error 404): No existe ninguna propiedad con esa id.
+      - Internal Server Error (Error 500): Error interno de la base de datos.
+  - `DELETE /propiedades/{id}`: Permite al administrador eliminar una propiedad por su id.
+    - **RUTA PRIVADA** Las peticiones se permiten si eres administrador.
+    - **Entrada**: Parametro `id`.
+    - **Salida**: N/A.
+    - **Excepciones**:
+      - Bad Request Exception (Error 400): El campo id no puede estar vacío.
+      - Illegal number exception (Error 400): La id, la id del propietario y el precio deben de ser un número.
+      - Unauthorized (Error 403): No tienes suficientes permisos.
+      - Propiedad not found (Error 404): No existe ninguna propiedad asociada a esa id.
+      - Internal Server Error (Error 500): Error interno de la base de datos.
+
