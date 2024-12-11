@@ -43,7 +43,6 @@ public class Usuario {
     public Usuario(String username, String password) {
         this.username = username;
         this.password = password;
-        this.rol = "USER";
     }
 
     public Usuario(){}
