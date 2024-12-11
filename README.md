@@ -23,7 +23,7 @@ Representa a los vendedores de la inmobiliaria
 | **password**   | String   |                 |
 | **rol**          | String   |                 |
 | **fecha_registro** | Date    |                 |
-| **id_propietario** | LONG    | NULLABLE                |
+| **id_propietario** | LONG    | NULLABLE, UNIQUE, FOREIGN KEY  (Propietarios)                |
 
 ---
 
@@ -34,7 +34,7 @@ Contiene los datos de la propiedad a vender.
 |----------------------|----------|-------------------------|
 | **id**              | Long     | PRIMARY KEY             |
 | **id_propietario**          | Long   | FOREIGN KEY  (Propietarios)               |
-| **direccion**     | String   |                         |
+| **direccion**     | String   | UNIQUE                        |
 | **precio**          | Double   |                 |
 | **vendida** | Boolean    |                |
 | **oculta** | Boolean    |                |
@@ -50,7 +50,7 @@ Contiene los propietarios de las propiedades.
 | **id**           | Long     | PRIMARY KEY                 |
 | **nombre** | String     |                     |
 | **apellidos**    | String     |                     |
-| **telefono**   | String      |      |
+| **telefono**   | String      | UNIQUE     |
 | **genero**  | String      |     |
 | **casado**  | Boolean      | NULLABLE     |
 | **n_hijos**  | Integer      | NULLABLE     |
