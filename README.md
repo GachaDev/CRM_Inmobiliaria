@@ -220,6 +220,7 @@ https://drive.google.com/file/d/1ZGk58pfa-kD9k4RlAZvzYUrDvaCLaHE6/view?usp=shari
       - Unauthorized (Error 403): No tienes suficientes permisos.
       - Propietario not found (Error 404): No existe ningun propietario asociada a esa id.
       - Internal Server Error (Error 500): Error interno de la base de datos.
+      - Internal Server Error (Error 500): No se puede eliminar un propietario con propiedades asociadas sin asignarlas a otro propietario.
 
 ## Lógica de negocio
 
