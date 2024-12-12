@@ -3,7 +3,6 @@ package com.es.crmInmobiliaria.service;
 import com.es.crmInmobiliaria.dtos.PropiedadCreateDTO;
 import com.es.crmInmobiliaria.dtos.PropiedadDTO;
 import com.es.crmInmobiliaria.dtos.PropiedadUpdateDTO;
-import com.es.crmInmobiliaria.dtos.UsuarioDTO;
 import com.es.crmInmobiliaria.error.exception.DataBaseException;
 import com.es.crmInmobiliaria.error.exception.NotFoundException;
 import com.es.crmInmobiliaria.model.Propiedad;
@@ -95,7 +94,7 @@ public class PropiedadService {
             throw new IllegalArgumentException("El usuario no puede ser null");
         }
 
-        if (propiedadRepository.findByDireccion(propiedadDTO.getDireccion()).isPresent()) {
+        if (propiedadRepository.findByDireccion(propiedadDTO.getDireccion().toUpperCase()).isPresent()) {
             throw new IllegalArgumentException("Ya hay una propiedad con esa direccion");
         }
 
@@ -103,7 +102,7 @@ public class PropiedadService {
 
         Propiedad propiedad = new Propiedad();
 
-        propiedad.setDireccion(propiedadDTO.getDireccion());
+        propiedad.setDireccion(propiedadDTO.getDireccion().toUpperCase());
         propiedad.setPrecio(propiedadDTO.getPrecio());
         propiedad.setVendedor(usuario);
         propiedad.setOculta(propiedadDTO.getOculta());

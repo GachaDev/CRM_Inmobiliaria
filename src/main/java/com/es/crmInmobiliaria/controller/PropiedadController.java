@@ -53,7 +53,7 @@ public class PropiedadController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PropiedadUpdateDTO> update(@RequestParam String id, @RequestBody PropiedadUpdateDTO propiedadDTO) {
+    public ResponseEntity<PropiedadUpdateDTO> update(@PathVariable String id, @RequestBody PropiedadUpdateDTO propiedadDTO) {
         if (id == null || id.isBlank()) {
             throw new BadRequestException("id no válida");
         }
@@ -68,7 +68,7 @@ public class PropiedadController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@RequestParam String id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         if (id == null || id.isBlank()) {
             throw new BadRequestException("id no válida");
         }
