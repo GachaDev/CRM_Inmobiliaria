@@ -1,47 +1,26 @@
-package com.es.crmInmobiliaria.model;
+package com.es.crmInmobiliaria.dtos;
 
-import jakarta.persistence.*;
-
-import java.util.List;
-
-@Entity
-@Table(name = "propietarios")
-public class Propietario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PropietarioDTO {
     private Long id;
-
-    @Column(nullable = false)
     private String nombre;
-
-    @Column(nullable = false)
     private String apellidos;
-
-    @Column(nullable = false, unique = true)
     private String telefono;
-
-    @Column(nullable = false)
     private String genero;
-
     private Boolean casado;
-
     private Integer n_hijos;
+    private Long id_usuario;
 
-    @OneToOne(mappedBy = "propietario", cascade = CascadeType.DETACH)
-    private Usuario usuario;
+    public PropietarioDTO() {}
 
-    @OneToMany(mappedBy = "propietario", cascade = CascadeType.DETACH)
-    private List<Propiedad> propiedades;
-
-    public Propietario() {}
-
-    public Propietario(String nombre, String apellidos, String telefono, String genero, Boolean casado, Integer n_hijos) {
+    public PropietarioDTO(Long id, String nombre, String apellidos, String telefono, String genero, Boolean casado, Integer n_hijos, Long id_usuario) {
+        this.id = id;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.telefono = telefono;
         this.genero = genero;
         this.casado = casado;
         this.n_hijos = n_hijos;
+        this.id_usuario = id_usuario;
     }
 
     public Long getId() {
@@ -100,19 +79,11 @@ public class Propietario {
         this.n_hijos = n_hijos;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Long getId_usuario() {
+        return id_usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public List<Propiedad> getPropiedades() {
-        return propiedades;
-    }
-
-    public void setPropiedades(List<Propiedad> propiedades) {
-        this.propiedades = propiedades;
+    public void setId_usuario(Long id_usuario) {
+        this.id_usuario = id_usuario;
     }
 }

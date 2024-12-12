@@ -189,6 +189,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/propiedades/{id}").access(getAccesByIdPropiedad())
                         .requestMatchers(HttpMethod.PUT, "/propiedades/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/propiedades/{id}").hasRole("ADMIN")
+                        .requestMatchers("/propietarios/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))

@@ -1,6 +1,8 @@
 package com.es.crmInmobiliaria.util;
 
 import com.es.crmInmobiliaria.dtos.PropiedadDTO;
+import com.es.crmInmobiliaria.dtos.PropietarioCreateDTO;
+import com.es.crmInmobiliaria.dtos.PropietarioDTO;
 import com.es.crmInmobiliaria.dtos.UsuarioDTO;
 import com.es.crmInmobiliaria.model.Propiedad;
 import com.es.crmInmobiliaria.model.Propietario;
@@ -17,7 +19,11 @@ public class Mapper {
         return new PropiedadDTO(propiedad.getId(), propiedad.getDireccion(), propiedad.getPrecio(), propiedad.getVendida(), propiedad.getOculta(), propiedad.getVendedor().getId().toString());
     }
 
-    public Propiedad DTOToEntity(PropiedadDTO propiedadDTO, Usuario vendedor, Propietario propietario) {
-        return new Propiedad(propietario, propiedadDTO.getDireccion(), propiedadDTO.getPrecio(), propiedadDTO.getVendida(), propiedadDTO.getOculta(), vendedor);
+    public PropietarioDTO entityToDTO(Propietario propietario) {
+        return new PropietarioDTO(propietario.getId(), propietario.getNombre(), propietario.getApellidos(), propietario.getTelefono(), propietario.getGenero(), propietario.getCasado(), propietario.getN_hijos(), propietario.getUsuario().getId());
+    }
+
+    public Propietario DTOToEntity(PropietarioCreateDTO propietarioCreateDTO) {
+        return new Propietario(propietarioCreateDTO.getNombre(), propietarioCreateDTO.getApellidos(), propietarioCreateDTO.getTelefono(), propietarioCreateDTO.getGenero(), propietarioCreateDTO.getCasado(), propietarioCreateDTO.getN_hijos());
     }
 }
