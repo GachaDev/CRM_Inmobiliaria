@@ -105,6 +105,15 @@ https://drive.google.com/file/d/1ZGk58pfa-kD9k4RlAZvzYUrDvaCLaHE6/view?usp=shari
       - Unauthorized (Error 403): No tienes suficientes permisos.
       - Username not found (Error 404): No existe ningun usuario asociado a ese username.
       - Internal Server Error (Error 500): Error interno de la base de datos.
+  - `PUT /usuarios/internal/{username}`: Permite actualizar el username, rol, id propietario y contraseña de un usuario.
+    - **RUTA PRIVADA** Todas las peticiones a este endpoint se permiten si eres admin o se le permite acceder al usuario que este asociado al username pasado por parametro.
+    - **Entrada**: Parametro `username` y JSON UserUpdateDTO con la nueva información del usuario.
+    - **Salida**: Nuevo objeto UserUpdateDTO.
+    - **Excepciones**:
+      - Bad Request Exception (Error 400): El campo username y los campos del objeto user no pueden estar vacios.
+      - Unauthorized (Error 403): No tienes suficientes permisos.
+      - Username not found (Error 404): No existe ningun usuario asociado a ese username.
+      - Internal Server Error (Error 500): Error interno de la base de datos.
   - `DELETE /usuarios/{username}`: Permite al administrador eliminar un usuario por su username.
     - **RUTA PRIVADA** Las peticiones se permiten si eres administrador.
     - **Entrada**: Parametro `username`.
