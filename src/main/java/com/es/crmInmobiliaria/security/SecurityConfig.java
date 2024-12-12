@@ -12,6 +12,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
@@ -80,6 +81,40 @@ public class SecurityConfig {
         };
     }
 
+    private AuthorizationManager<RequestAuthorizationContext> getUsuarioByUsernameManager() {
+        return (authentication, object) -> {
+            Authentication auth = authentication.get();
+
+            boolean isAdmin = auth.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+
+            if (isAdmin) {
+                return new AuthorizationDecision(true);
+            }
+
+            String path = object.getRequest().getRequestURI();
+            String id = path.replaceAll("/usuarios/", "");
+
+            Usuario usuario = null;
+
+            try {
+                usuario = usuarioRepository.findByUsername(id).orElse(null);
+            } catch (Exception e) {
+                throw new DataBaseException("error inesperado en la base de datos. " + e.getMessage());
+            }
+
+            if (usuario == null) {
+                return new AuthorizationDecision(false);
+            }
+
+            if (usuario.getUsername().equals(auth.getName())) {
+                return new AuthorizationDecision(true);
+            }
+
+            return new AuthorizationDecision(false);
+        };
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -88,6 +123,8 @@ public class SecurityConfig {
                         .requestMatchers("/usuarios/login", "/usuarios/register", "/swagger-ui/**", "/v3/api-docs/**", "/").permitAll()
                         .requestMatchers("/usuarios/").hasRole("ADMIN")
                         .requestMatchers("/usuarios/internal/{username}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/usuarios/{username}").access(getUsuarioByUsernameManager())
+                        .requestMatchers(HttpMethod.DELETE,"/usuarios/{username}").hasRole("ADMIN")
                         .requestMatchers("/usuarios/{id}").access(getUsuarioByIdManager())
                         .anyRequest().authenticated()
                 )
