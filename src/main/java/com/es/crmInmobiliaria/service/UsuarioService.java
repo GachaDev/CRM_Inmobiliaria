@@ -6,9 +6,11 @@ import com.es.crmInmobiliaria.dtos.UsuarioUpdateDTO;
 import com.es.crmInmobiliaria.error.exception.BadRequestException;
 import com.es.crmInmobiliaria.error.exception.DataBaseException;
 import com.es.crmInmobiliaria.error.exception.NotFoundException;
+import com.es.crmInmobiliaria.model.Propiedad;
 import com.es.crmInmobiliaria.model.Propietario;
 import com.es.crmInmobiliaria.model.Usuario;
 import com.es.crmInmobiliaria.repository.PropietarioRepository;
+import com.es.crmInmobiliaria.repository.PropiedadRepository;
 import com.es.crmInmobiliaria.repository.UsuarioRepository;
 import com.es.crmInmobiliaria.util.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ public class UsuarioService implements UserDetailsService {
     private UsuarioRepository usuarioRepository;
     @Autowired
     private PropietarioRepository propietarioRepository;
+    @Autowired
+    private PropiedadRepository propiedadRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -201,6 +205,16 @@ public class UsuarioService implements UserDetailsService {
 
         if (usuario == null) {
             throw new NotFoundException("Usuario no encontrado para eliminar");
+        }
+
+        if (usuario.getPropiedades() != null && !usuario.getPropiedades().isEmpty()) {
+            throw new DataBaseException("No se puede eliminar un vendedor con propiedades asociadas sin asignarlas a otro vendedor");
+        }
+
+        if (usuario.getPropietario() != null) {
+            Propietario propietario = usuario.getPropietario();
+            propietario.setUsuario(null);
+            propietarioRepository.save(propietario);
         }
 
         try {

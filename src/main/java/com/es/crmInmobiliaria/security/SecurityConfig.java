@@ -184,7 +184,7 @@ public class SecurityConfig {
                         .requestMatchers("/usuarios/internal/{username}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/usuarios/{username}").access(getUsuarioByUsernameManager())
                         .requestMatchers(HttpMethod.DELETE,"/usuarios/{username}").hasRole("ADMIN")
-                        .requestMatchers("/usuarios/{id}").access(getUsuarioByIdManager())
+                        .requestMatchers(HttpMethod.GET, "/usuarios/{id}").access(getUsuarioByIdManager())
                         .requestMatchers("/propiedades/").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/propiedades/{id}").access(getAccesByIdPropiedad())
                         .requestMatchers(HttpMethod.PUT, "/propiedades/{id}").hasRole("ADMIN")
