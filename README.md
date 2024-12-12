@@ -226,3 +226,5 @@ https://drive.google.com/file/d/1ZGk58pfa-kD9k4RlAZvzYUrDvaCLaHE6/view?usp=shari
 | `direccion`        | No puede ser null.                                                       | 400          | "El campo direccion no puede ser nulo."          |
 | `precio`              | Mayor que 0.                                                             | 400          | "El campo precio debe ser mayor que 0."            |
 | `n_hijos`              | Mayor o igual que 0.                                                             | 400          | "El campo n_hijos debe ser mayor o igual que 0."            |
+| `rol`              | Solo se admite USER o ADMIN                                                            | 400          | "El campo rol solo puede ser USER o ADMIN."            |
+
