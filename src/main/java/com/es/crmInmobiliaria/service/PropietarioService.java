@@ -5,8 +5,12 @@ import com.es.crmInmobiliaria.dtos.PropietarioDTO;
 import com.es.crmInmobiliaria.error.exception.BadRequestException;
 import com.es.crmInmobiliaria.error.exception.DataBaseException;
 import com.es.crmInmobiliaria.error.exception.NotFoundException;
+import com.es.crmInmobiliaria.model.Propiedad;
 import com.es.crmInmobiliaria.model.Propietario;
+import com.es.crmInmobiliaria.model.Usuario;
+import com.es.crmInmobiliaria.repository.PropiedadRepository;
 import com.es.crmInmobiliaria.repository.PropietarioRepository;
+import com.es.crmInmobiliaria.repository.UsuarioRepository;
 import com.es.crmInmobiliaria.util.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +23,10 @@ import java.util.regex.Pattern;
 public class PropietarioService {
     @Autowired
     private PropietarioRepository propietarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private PropiedadRepository propiedadRepository;
     @Autowired
     private Mapper mapper;
 
@@ -154,6 +162,16 @@ public class PropietarioService {
             throw new NotFoundException("No se ha encontrado ningun propietario con esa id");
         } catch (Exception e) {
             throw new DataBaseException("error inesperado en la base de datos. " + e.getMessage());
+        }
+
+        if (propietario.getUsuario() != null) {
+            Usuario usuario = propietario.getUsuario();
+            usuario.setPropietario(null);
+            usuarioRepository.save(usuario);
+        }
+
+        if (propietario.getPropiedades() != null && !propietario.getPropiedades().isEmpty()) {
+            throw new DataBaseException("No se puede eliminar un propietario con propiedades asociadas sin asignarlas a otro propietario");
         }
 
         try {
