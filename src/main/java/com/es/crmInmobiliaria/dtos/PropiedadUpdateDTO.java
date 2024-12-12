@@ -1,28 +1,20 @@
 package com.es.crmInmobiliaria.dtos;
 
-public class PropiedadCreateDTO {
-    private String direccion;
+public class PropiedadUpdateDTO {
     private Double precio;
     private Boolean vendida;
     private Boolean oculta;
     private String id_propietario;
+    private String id_usuario;
 
-    public PropiedadCreateDTO() {}
+    public PropiedadUpdateDTO() {}
 
-    public PropiedadCreateDTO(String direccion, Double precio, Boolean vendida, Boolean oculta, String id_propietario) {
-        this.direccion = direccion;
+    public PropiedadUpdateDTO(Double precio, Boolean vendida, Boolean oculta, String id_propietario, String id_usuario) {
         this.precio = precio;
         this.vendida = vendida;
         this.oculta = oculta;
         this.id_propietario = id_propietario;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+        this.id_usuario = id_usuario;
     }
 
     public Double getPrecio() {
@@ -55,5 +47,13 @@ public class PropiedadCreateDTO {
 
     public void setId_propietario(String id_propietario) {
         this.id_propietario = id_propietario;
+    }
+
+    public String getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(String id_usuario) {
+        this.id_usuario = id_usuario;
     }
 }

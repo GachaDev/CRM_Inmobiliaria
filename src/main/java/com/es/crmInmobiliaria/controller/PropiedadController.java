@@ -2,7 +2,7 @@ package com.es.crmInmobiliaria.controller;
 
 import com.es.crmInmobiliaria.dtos.PropiedadCreateDTO;
 import com.es.crmInmobiliaria.dtos.PropiedadDTO;
-import com.es.crmInmobiliaria.dtos.UsuarioDTO;
+import com.es.crmInmobiliaria.dtos.PropiedadUpdateDTO;
 import com.es.crmInmobiliaria.error.exception.BadRequestException;
 import com.es.crmInmobiliaria.error.exception.NotFoundException;
 import com.es.crmInmobiliaria.service.PropiedadService;
@@ -53,12 +53,28 @@ public class PropiedadController {
     }
 
     @PutMapping("/{id}")
-    public String update(@RequestParam String id) {
-        return "PropiedadController";
+    public ResponseEntity<PropiedadUpdateDTO> update(@RequestParam String id, @RequestBody PropiedadUpdateDTO propiedadDTO) {
+        if (id == null || id.isBlank()) {
+            throw new BadRequestException("id no válida");
+        }
+
+        if (propiedadDTO == null) {
+            throw new BadRequestException("El body no puede ser null");
+        }
+
+        PropiedadUpdateDTO propiedadDTOUpdated = propiedadService.update(id, propiedadDTO);
+
+        return new ResponseEntity<>(propiedadDTOUpdated, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@RequestParam String id) {
-        return "PropiedadController";
+    public ResponseEntity<Void> delete(@RequestParam String id) {
+        if (id == null || id.isBlank()) {
+            throw new BadRequestException("id no válida");
+        }
+
+        propiedadService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

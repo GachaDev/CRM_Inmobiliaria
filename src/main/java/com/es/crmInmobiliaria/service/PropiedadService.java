@@ -2,8 +2,10 @@ package com.es.crmInmobiliaria.service;
 
 import com.es.crmInmobiliaria.dtos.PropiedadCreateDTO;
 import com.es.crmInmobiliaria.dtos.PropiedadDTO;
+import com.es.crmInmobiliaria.dtos.PropiedadUpdateDTO;
 import com.es.crmInmobiliaria.dtos.UsuarioDTO;
 import com.es.crmInmobiliaria.error.exception.DataBaseException;
+import com.es.crmInmobiliaria.error.exception.NotFoundException;
 import com.es.crmInmobiliaria.model.Propiedad;
 import com.es.crmInmobiliaria.model.Propietario;
 import com.es.crmInmobiliaria.model.Usuario;
@@ -64,7 +66,9 @@ public class PropiedadService {
         Propiedad propiedad = null;
 
         try {
-            propiedad = propiedadRepository.findById(idL).orElseThrow(() -> new DataBaseException("No se ha encontrado ninguna propiedad con esa id"));
+            propiedad = propiedadRepository.findById(idL).orElseThrow(() -> new NotFoundException("No se ha encontrado ninguna propiedad con esa id"));
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No se ha encontrado ninguna propiedad con esa id");
         } catch (Exception e) {
             throw new DataBaseException("error inesperado en la base de datos. " + e.getMessage());
         }
@@ -95,7 +99,7 @@ public class PropiedadService {
             throw new IllegalArgumentException("Ya hay una propiedad con esa direccion");
         }
 
-        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow(() -> new DataBaseException("No se ha encontrado ningun usuario con ese nombre"));
+        Usuario usuario = usuarioRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("No se ha encontrado ningun usuario con ese nombre"));
 
         Propiedad propiedad = new Propiedad();
 
@@ -117,7 +121,9 @@ public class PropiedadService {
             Propietario propietario = null;
 
             try {
-                propietario = propietarioRepository.findById(idL).orElseThrow(() -> new DataBaseException("No se ha encontrado ningun propietario con esa id"));
+                propietario = propietarioRepository.findById(idL).orElseThrow(() -> new NotFoundException("No se ha encontrado ningun propietario con esa id"));
+            } catch (NotFoundException e) {
+                throw new NotFoundException("No se ha encontrado ningun propietario con esa id");
             } catch (Exception e) {
                 throw new DataBaseException("error inesperado en la base de datos. " + e.getMessage());
             }
@@ -132,5 +138,108 @@ public class PropiedadService {
         }
 
         return propiedadDTO;
+    }
+
+    public PropiedadUpdateDTO update(String id, PropiedadUpdateDTO propiedadDTO) {
+        if (propiedadDTO.getPrecio() == null) {
+            throw new IllegalArgumentException("El campo precio no puede ser null");
+        }
+
+        if (propiedadDTO.getPrecio() <= 0) {
+            throw new IllegalArgumentException("El precio debe ser mayor a cero");
+        }
+
+        Usuario usuario = null;
+
+        Long idUsuario = 0L;
+
+        try {
+            idUsuario = Long.parseLong(propiedadDTO.getId_usuario());
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("La id del usuario debe de ser null o ser un número");
+        }
+
+        try {
+            usuario = usuarioRepository.findById(idUsuario).orElseThrow(() -> new NotFoundException("No se ha encontrado ningun usuario con esa id"));
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No se ha encontrado ningun usuario con esa id");
+        }catch (Exception e) {
+            throw new DataBaseException("error inesperado en la base de datos. " + e.getMessage());
+        }
+
+        Propiedad propiedad = null;
+
+        Long idP = 0L;
+
+        try {
+            idP = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("La id debe de ser un número correcto");
+        }
+
+        try {
+            propiedad = propiedadRepository.findById(idP).orElseThrow(() -> new NotFoundException("No se ha encontrado ninguna propiedad con esa id"));
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No se ha encontrado ninguna propiedad con esa id");
+        } catch (Exception e) {
+            throw new DataBaseException("error inesperado en la base de datos. " + e.getMessage());
+        }
+
+        propiedad.setPrecio(propiedadDTO.getPrecio());
+        propiedad.setVendida(propiedadDTO.getVendida());
+        propiedad.setOculta(propiedadDTO.getOculta());
+        propiedad.setVendedor(usuario);
+
+        if (propiedadDTO.getId_propietario() != null && !propiedadDTO.getId_propietario().isBlank()) {
+            Long idL = 0L;
+
+            try {
+                idL = Long.parseLong(propiedadDTO.getId_propietario());
+            } catch (NumberFormatException e) {
+                throw new NumberFormatException("La id del propietario debe de ser null o ser un número");
+            }
+
+            Propietario propietario = null;
+
+            try {
+                propietario = propietarioRepository.findById(idL).orElseThrow(() -> new NotFoundException("No se ha encontrado ningun propietario con esa id"));
+            } catch (NotFoundException e) {
+                throw new NotFoundException("No se ha encontrado ningun propietario con esa id");
+            } catch (Exception e) {
+                throw new DataBaseException("error inesperado en la base de datos. " + e.getMessage());
+            }
+
+            propiedad.setPropietario(propietario);
+        }
+
+        try {
+            propiedadRepository.save(propiedad);
+        } catch (Exception e) {
+            throw new DataBaseException("Error al actualizar la propiedad: " + e.getMessage());
+        }
+
+        return propiedadDTO;
+    }
+
+    public void delete(String id) {
+        Long idP = 0L;
+
+        try {
+            idP = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("La id debe de ser un número correcto");
+        }
+
+        Propiedad propiedad = null;
+
+        try {
+            propiedad = propiedadRepository.findById(idP).orElseThrow(() -> new NotFoundException("No se ha encontrado ninguna propiedad con esa id"));
+        } catch (NotFoundException e) {
+            throw new NotFoundException("No se ha encontrado ninguna propiedad con esa id");
+        } catch (Exception e) {
+            throw new DataBaseException("error inesperado en la base de datos. " + e.getMessage());
+        }
+
+        propiedadRepository.delete(propiedad);
     }
 }
