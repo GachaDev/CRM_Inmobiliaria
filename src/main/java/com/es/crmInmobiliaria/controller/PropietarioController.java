@@ -40,4 +40,27 @@ public class PropietarioController {
         return new ResponseEntity<>(propiedadService.create(propietarioDTO), HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<PropietarioCreateDTO> update(@PathVariable String id, @RequestBody PropietarioCreateDTO propietarioDTO) {
+        if (id == null || id.isBlank()) {
+            throw new BadRequestException("id no válida");
+        }
+
+        if (propietarioDTO == null) {
+            throw new BadRequestException("El body no puede ser null");
+        }
+
+        return new ResponseEntity<>(propiedadService.update(id, propietarioDTO), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        if (id == null || id.isBlank()) {
+            throw new BadRequestException("id no válida");
+        }
+
+        propiedadService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
