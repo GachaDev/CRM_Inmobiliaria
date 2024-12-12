@@ -4,7 +4,6 @@ import com.es.crmInmobiliaria.dtos.UsuarioDTO;
 import com.es.crmInmobiliaria.dtos.UsuarioLoginDTO;
 import com.es.crmInmobiliaria.dtos.UsuarioUpdateDTO;
 import com.es.crmInmobiliaria.error.exception.BadRequestException;
-import com.es.crmInmobiliaria.error.exception.NotFoundException;
 import com.es.crmInmobiliaria.service.UsuarioService;
 import com.es.crmInmobiliaria.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +39,7 @@ public class UsuarioController {
             throw new BadRequestException("id no válida");
         }
 
-        UsuarioDTO usuarioDTO = usuarioService.findById(id);
-
-        if (usuarioDTO == null) {
-            throw new NotFoundException("usuario no encontrado");
-        }
-
-        return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -61,9 +54,7 @@ public class UsuarioController {
 
     @PostMapping("/register")
     public ResponseEntity<UsuarioLoginDTO> register(@RequestBody UsuarioLoginDTO usuarioRegisterDTO) {
-        usuarioService.registerUser(usuarioRegisterDTO);
-
-        return new ResponseEntity<UsuarioLoginDTO>(usuarioRegisterDTO, HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.registerUser(usuarioRegisterDTO), HttpStatus.OK);
     }
 
     @PutMapping("/{username}")
@@ -76,9 +67,7 @@ public class UsuarioController {
             throw new BadRequestException("El body no puede ser null");
         }
 
-        UsuarioLoginDTO updatedUser = usuarioService.updateUser(username, usuarioDTO);
-
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.updateUser(username, usuarioDTO), HttpStatus.OK);
     }
 
     @PutMapping("/internal/{username}")
@@ -91,9 +80,7 @@ public class UsuarioController {
             throw new BadRequestException("El body no puede ser null");
         }
 
-        UsuarioUpdateDTO updatedUser = usuarioService.updateInternalUser(username, usuarioDTO);
-
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        return new ResponseEntity<>(usuarioService.updateInternalUser(username, usuarioDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/{username}")
