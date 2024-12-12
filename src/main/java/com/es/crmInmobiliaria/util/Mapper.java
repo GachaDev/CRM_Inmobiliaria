@@ -20,7 +20,7 @@ public class Mapper {
     }
 
     public PropietarioDTO entityToDTO(Propietario propietario) {
-        return new PropietarioDTO(propietario.getId(), propietario.getNombre(), propietario.getApellidos(), propietario.getTelefono(), propietario.getGenero(), propietario.getCasado(), propietario.getN_hijos(), propietario.getUsuario().getId());
+        return new PropietarioDTO(propietario.getId(), propietario.getNombre(), propietario.getApellidos(), propietario.getTelefono(), propietario.getGenero(), propietario.getCasado(), propietario.getN_hijos(), propietario.getUsuario() != null ? propietario.getUsuario().getId() : null);
     }
 
     public Propietario DTOToEntity(PropietarioCreateDTO propietarioCreateDTO) {
