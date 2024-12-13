@@ -57,7 +57,7 @@ Contiene los propietarios de las propiedades.
 
 ## Diagrama E/R
 
-https://drive.google.com/file/d/1ZGk58pfa-kD9k4RlAZvzYUrDvaCLaHE6/view?usp=sharing
+[https://drive.google.com/file/d/1ZGk58pfa-kD9k4RlAZvzYUrDvaCLaHE6/view?usp=sharing](https://drive.google.com/file/d/1ZGk58pfa-kD9k4RlAZvzYUrDvaCLaHE6/view?usp=sharing)
 
 ## Endpoints
 
