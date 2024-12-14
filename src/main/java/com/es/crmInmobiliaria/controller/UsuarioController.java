@@ -52,7 +52,7 @@ public class UsuarioController {
             throw new BadRequestException("El body no puede ser nulo");
         }
 
-        if (usuarioLoginDTO.getUsername().isEmpty() || usuarioLoginDTO.getPassword().isEmpty()) {
+        if (usuarioLoginDTO.getUsername().isBlank() || usuarioLoginDTO.getPassword().isBlank()) {
             throw new BadRequestException("El usuario o la contraseña no puede ser vacío");
         }
 
