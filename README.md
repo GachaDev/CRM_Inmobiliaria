@@ -80,7 +80,7 @@ Contiene los propietarios de las propiedades.
       - Unauthorized (Error 403): No tienes suficientes permisos.
       - Username not found (Error 404): No existe ningun usuario asociado a esa id.
       - Internal Server Error (Error 500): Error interno de la base de datos.
-  - `POST /usuarios/`: Permite crear un usuario.
+  - `POST /usuarios/register`: Permite crear un usuario.
     - **RUTA PÚBLICA** Todas las peticiones a este endpoint deben permitirse.
     - **Entrada**: JSON con `username` y `password`.
     - **Salida**: Objeto UserDTO.
