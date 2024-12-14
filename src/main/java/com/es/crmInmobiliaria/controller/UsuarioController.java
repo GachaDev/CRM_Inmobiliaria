@@ -44,6 +44,18 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UsuarioLoginDTO usuarioLoginDTO) {
+        if (usuarioLoginDTO == null) {
+            throw new BadRequestException("El body no puede ser null");
+        }
+
+        if (usuarioLoginDTO.getUsername() == null || usuarioLoginDTO.getPassword() == null) {
+            throw new BadRequestException("El body no puede ser nulo");
+        }
+
+        if (usuarioLoginDTO.getUsername().isEmpty() || usuarioLoginDTO.getPassword().isEmpty()) {
+            throw new BadRequestException("El usuario o la contraseña no puede ser vacío");
+        }
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(usuarioLoginDTO.getUsername(), usuarioLoginDTO.getPassword())
         );
